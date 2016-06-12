@@ -72,6 +72,23 @@ public:
         return 0;
     }
 
+#ifdef QCOM_DIRECTTRACK
+    virtual sp<IDirectTrack> createDirectTrack(
+                                pid_t pid,
+                                uint32_t sampleRate,
+                                audio_channel_mask_t channelMask,
+                                audio_io_handle_t output,
+                                int *sessionId,
+                                IDirectTrackClient* client,
+                                audio_stream_type_t streamType,
+                                status_t *status) {
+        return 0;
+    }
+
+    virtual void deleteEffectSession() {
+    }
+#endif
+
     virtual sp<IAudioRecord> openRecord(
                                 audio_io_handle_t input,
                                 uint32_t sampleRate,
