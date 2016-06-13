@@ -176,6 +176,12 @@ public:
 
     virtual void registerClient(const sp<IAudioFlingerClient>& client) {}
 
+#ifdef QCOM_DIRECTTRACK
+    virtual status_t deregisterClient(const sp<IAudioFlingerClient>& client) {
+        return 0;
+    }
+#endif
+
     virtual size_t getInputBufferSize(uint32_t sampleRate, audio_format_t format,
             audio_channel_mask_t channelMask) const {
         return 0;
