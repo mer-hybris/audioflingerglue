@@ -30,6 +30,14 @@ endif
 include $(CLEAR_VARS)
 LOCAL_SRC_FILES := audioflingerglue.cpp IPrivateAfGlue.cpp IPrivateAfGlueHandler.cpp
 
+ifeq ($(strip $(ANDROID_MAJOR)), 4)
+LOCAL_SHARED_LIBRARIES := libc \
+                          libdl \
+                          libutils \
+                          libcutils \
+                          libbinder \
+                          libmedia
+else
 LOCAL_SHARED_LIBRARIES := libc \
                           libdl \
                           libutils \
@@ -37,6 +45,7 @@ LOCAL_SHARED_LIBRARIES := libc \
                           libbinder \
                           libmedia \
                           libserviceutility
+endif
 LOCAL_CPPFLAGS=-DANDROID_MAJOR=$(ANDROID_MAJOR) -DANDROID_MINOR=$(ANDROID_MINOR) -DANDROID_MICRO=$(ANDROID_MICRO)
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := libaudioflingerglue
