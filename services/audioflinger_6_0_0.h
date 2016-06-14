@@ -72,31 +72,16 @@ public:
         return 0;
     }
 
-#ifdef QCOM_DIRECTTRACK
-    virtual sp<IDirectTrack> createDirectTrack(
-                                pid_t pid,
-                                uint32_t sampleRate,
-                                audio_channel_mask_t channelMask,
-                                audio_io_handle_t output,
-                                int *sessionId,
-                                IDirectTrackClient* client,
-                                audio_stream_type_t streamType,
-                                status_t *status) {
-        return 0;
-    }
-
-    virtual void deleteEffectSession() {
-    }
-#endif
-
     virtual sp<IAudioRecord> openRecord(
                                 audio_io_handle_t input,
                                 uint32_t sampleRate,
                                 audio_format_t format,
                                 audio_channel_mask_t channelMask,
+                                const String16& opPackageName,
                                 size_t *pFrameCount,
                                 track_flags_t *flags,
                                 pid_t tid,
+                                int clientUid,
                                 int *sessionId,
                                 size_t *notificationFrames,
                                 sp<IMemory>& cblk,
@@ -175,12 +160,6 @@ public:
     }
 
     virtual void registerClient(const sp<IAudioFlingerClient>& client) {}
-
-#ifdef QCOM_DIRECTTRACK
-    virtual status_t deregisterClient(const sp<IAudioFlingerClient>& client) {
-        return 0;
-    }
-#endif
 
     virtual size_t getInputBufferSize(uint32_t sampleRate, audio_format_t format,
             audio_channel_mask_t channelMask) const {
@@ -272,6 +251,7 @@ public:
                                     int32_t priority,
                                     audio_io_handle_t output,
                                     int sessionId,
+                                    const String16& opPackageName,
                                     status_t *status,
                                     int *id,
                                     int *enabled) {
@@ -327,6 +307,10 @@ public:
     }
 
     virtual audio_hw_sync_t getAudioHwSyncForSession(audio_session_t sessionId) {
+        return 0;
+    }
+
+    virtual status_t systemReady() {
         return 0;
     }
 

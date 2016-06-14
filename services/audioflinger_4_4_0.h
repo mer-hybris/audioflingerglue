@@ -61,18 +61,26 @@ public:
                                 uint32_t sampleRate,
                                 audio_format_t format,
                                 audio_channel_mask_t channelMask,
-                                size_t *pFrameCount,
+                                size_t frameCount,
                                 track_flags_t *flags,
                                 const sp<IMemory>& sharedBuffer,
                                 audio_io_handle_t output,
-                                pid_t tid,
+                                pid_t tid,  // -1 means unused, otherwise must be valid non-0
                                 int *sessionId,
+                                // input: ignored
+                                // output: server's description of IAudioTrack for display in logs.
+                                // Don't attempt to parse, as the format could change.
+                                String8& name,
                                 int clientUid,
                                 status_t *status) {
         return 0;
     }
 
+
 #ifdef QCOM_DIRECTTRACK
+    /* create a direct audio track and registers it with AudioFlinger.
+     * return null if the track cannot be created.
+     */
     virtual sp<IDirectTrack> createDirectTrack(
                                 pid_t pid,
                                 uint32_t sampleRate,
@@ -84,9 +92,6 @@ public:
                                 status_t *status) {
         return 0;
     }
-
-    virtual void deleteEffectSession() {
-    }
 #endif
 
     virtual sp<IAudioRecord> openRecord(
@@ -94,13 +99,10 @@ public:
                                 uint32_t sampleRate,
                                 audio_format_t format,
                                 audio_channel_mask_t channelMask,
-                                size_t *pFrameCount,
+                                size_t frameCount,
                                 track_flags_t *flags,
-                                pid_t tid,
+                                pid_t tid,  // -1 means unused, otherwise must be valid non-0
                                 int *sessionId,
-                                size_t *notificationFrames,
-                                sp<IMemory>& cblk,
-                                sp<IMemory>& buffers,
                                 status_t *status) {
         return 0;
     }
@@ -176,24 +178,19 @@ public:
 
     virtual void registerClient(const sp<IAudioFlingerClient>& client) {}
 
-#ifdef QCOM_DIRECTTRACK
-    virtual status_t deregisterClient(const sp<IAudioFlingerClient>& client) {
-        return 0;
-    }
-#endif
-
     virtual size_t getInputBufferSize(uint32_t sampleRate, audio_format_t format,
             audio_channel_mask_t channelMask) const {
         return 0;
     }
 
     virtual status_t openOutput(audio_module_handle_t module,
-                                audio_io_handle_t *output,
-                                audio_config_t *config,
-                                audio_devices_t *devices,
-                                const String8& address,
-                                uint32_t *latencyMs,
-                                audio_output_flags_t flags) {
+                                         audio_devices_t *pDevices,
+                                         uint32_t *pSamplingRate,
+                                         audio_format_t *pFormat,
+                                         audio_channel_mask_t *pChannelMask,
+                                         uint32_t *pLatencyMs,
+                                         audio_output_flags_t flags,
+                                         const audio_offload_info_t *offloadInfo = NULL) {
         return NO_ERROR;
     }
 
@@ -215,12 +212,10 @@ public:
     }
 
     virtual status_t openInput(audio_module_handle_t module,
-                               audio_io_handle_t *input,
-                               audio_config_t *config,
-                               audio_devices_t *device,
-                               const String8& address,
-                               audio_source_t source,
-                               audio_input_flags_t flags) {
+                                        audio_devices_t *pDevices,
+                                        uint32_t *pSamplingRate,
+                                        audio_format_t *pFormat,
+                                        audio_channel_mask_t *pChannelMask) {
         return NO_ERROR;
     }
 
@@ -228,7 +223,7 @@ public:
         return NO_ERROR;
     }
 
-    virtual status_t invalidateStream(audio_stream_type_t stream) {
+    virtual status_t setStreamOutput(audio_stream_type_t stream, audio_io_handle_t output) {
         return NO_ERROR;
     }
 
@@ -245,12 +240,12 @@ public:
         return 0;
     }
 
-    virtual audio_unique_id_t newAudioUniqueId() {
+    virtual int newAudioSessionId() {
         return 0;
     }
 
-    virtual void acquireAudioSessionId(int audioSession, pid_t pid) {}
-    virtual void releaseAudioSessionId(int audioSession, pid_t pid) {}
+    virtual void acquireAudioSessionId(int audioSession) {}
+    virtual void releaseAudioSessionId(int audioSession) {}
 
     virtual status_t queryNumberEffects(uint32_t *numEffects) const {
         *numEffects = 0;
@@ -297,37 +292,6 @@ public:
 
     virtual status_t setLowRamDevice(bool isLowRamDevice) {
         return NO_ERROR;
-    }
-
-    virtual status_t listAudioPorts(unsigned int *num_ports,
-                                    struct audio_port *ports) {
-        return NO_ERROR;
-    }
-
-    virtual status_t getAudioPort(struct audio_port *port) {
-        return NO_ERROR;
-    }
-
-    virtual status_t createAudioPatch(const struct audio_patch *patch,
-                                       audio_patch_handle_t *handle) {
-        return NO_ERROR;
-    }
-
-    virtual status_t releaseAudioPatch(audio_patch_handle_t handle) {
-        return NO_ERROR;
-    }
-
-    virtual status_t listAudioPatches(unsigned int *num_patches,
-                                      struct audio_patch *patches) {
-        return NO_ERROR;
-    }
-
-    virtual status_t setAudioPortConfig(const struct audio_port_config *config) {
-        return NO_ERROR;
-    }
-
-    virtual audio_hw_sync_t getAudioHwSyncForSession(audio_session_t sessionId) {
-        return 0;
     }
 
 };
