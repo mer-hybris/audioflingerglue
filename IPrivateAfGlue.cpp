@@ -78,7 +78,7 @@ public:
             data.writeInt32(0);
         else
             data.writeInt32(1);
-#if ANDROID_MAJOR == 6
+#if ANDROID_MAJOR >= 6
         data.writeStrongBinder(IInterface::asBinder(handler));
 #else
         data.writeStrongBinder(handler->asBinder());
