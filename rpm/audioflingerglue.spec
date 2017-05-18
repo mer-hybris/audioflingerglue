@@ -47,7 +47,7 @@ mv audioflingerglue* audioflingerglue
 popd
 
 %build
-droid-make -j4 libaudioflingerglue miniafservice
+droid-make -j4 libaudioflingerglue_32 miniafservice
 
 %install
 
