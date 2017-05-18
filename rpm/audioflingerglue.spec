@@ -69,7 +69,8 @@ cp out/target/product/*/system/bin/miniafservice \
     $RPM_BUILD_ROOT/%{_libexecdir}/droid-hybris/system/bin/
 
 cp external/audioflingerglue/audioflingerglue.h $RPM_BUILD_ROOT/%{_includedir}/audioflingerglue/
-cp external/audioflingerglue/hybris.c $RPM_BUILD_ROOT/%{_datadir}/audioflingerglue/
+sed -e "s/@TARGET_LIB_ARCH@/$DROIDLIB/" external/audioflingerglue/hybris.c.in > \
+    $RPM_BUILD_ROOT/%{_datadir}/audioflingerglue/hybris.c
 
 LIBAFSOLOC=$RPM_BUILD_ROOT/file.list
 echo %{_libexecdir}/droid-hybris/system/$DROIDLIB/libaudioflingerglue.so > %{LIBAFSOLOC}
