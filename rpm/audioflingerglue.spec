@@ -47,7 +47,21 @@ mv audioflingerglue* audioflingerglue
 popd
 
 %build
-droid-make -j4 libaudioflingerglue miniafservice
+echo "building for %{device_rpm_architecture_string}"
+
+# default to building whatever target arch defines
+LIB_TARGET=libaudioflingerglue
+
+%if "%{device_rpm_architecture_string}" == "aarch64"
+    # noop
+%else
+    ANDROID_ARCH=`grep -h -m 1 "TARGET_ARCH *:=" device/*/*/*.mk | sed -e 's/ *TARGET_ARCH *:= *\([a-zA-Z0-9_]*\) */\1/'`
+    if [ "$ANDROID_ARCH" == "arm64" ]; then
+        LIB_TARGET=${LIB_TARGET}_32
+    fi
+%endif
+
+droid-make %{?_smp_mflags} $LIB_TARGET miniafservice
 
 %install
 
