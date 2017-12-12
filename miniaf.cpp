@@ -25,6 +25,7 @@
 #include <binder/IPermissionController.h>
 #include <binder/MemoryHeapBase.h>
 #include "PrivateAfGlue.h"
+#include "android-config.h"
 
 #if ANDROID_MAJOR == 4 && ANDROID_MINOR == 4
 #include "services/audioflinger_4_4_0.h"
