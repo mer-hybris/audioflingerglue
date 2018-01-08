@@ -25,6 +25,17 @@
 #include <binder/IPermissionController.h>
 #include <binder/MemoryHeapBase.h>
 #include "PrivateAfGlue.h"
+#include "android-config.h"
+
+#ifdef USE_SERVICES_VENDOR_EXTENSION
+
+#if ANDROID_MAJOR == 5 && ANDROID_MINOR == 1
+#include "services/audioflinger_5_1_0_custom.h"
+#else
+#error Unsupported Android version.
+#endif
+
+#else
 
 #if ANDROID_MAJOR == 4 && ANDROID_MINOR == 4
 #include "services/audioflinger_4_4_0.h"
@@ -36,6 +47,8 @@
 #include "services/audioflinger_7_1_0.h"
 #else
 #error Unsupported Android version.
+#endif
+
 #endif
 
 using namespace android;
