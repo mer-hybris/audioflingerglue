@@ -64,5 +64,8 @@ LOCAL_CPPFLAGS := -DANDROID_MAJOR=$(ANDROID_MAJOR) -DANDROID_MINOR=$(ANDROID_MIN
 ifneq ($(CM_BUILD),)
 LOCAL_CPPFLAGS += -DCM_BUILD
 endif
+ifneq ($(shell cat frameworks/av/include/media/AudioSystem.h |grep GetEMParameter),)
+LOCAL_CPPFLAGS += -DUSE_SERVICES_VENDOR_EXTENSION
+endif
 LOCAL_MODULE := miniafservice
 include $(BUILD_EXECUTABLE)
