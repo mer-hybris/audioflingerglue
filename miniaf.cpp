@@ -25,7 +25,6 @@
 #include <binder/IPermissionController.h>
 #include <binder/MemoryHeapBase.h>
 #include "PrivateAfGlue.h"
-#include "android-config.h"
 
 #ifdef USE_SERVICES_VENDOR_EXTENSION
 
