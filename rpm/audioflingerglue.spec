@@ -15,7 +15,6 @@ License:       ASL 2.0
 BuildRequires: ubu-trusty
 BuildRequires: sudo-for-abuild
 BuildRequires: droid-bin-src-full
-BuildRequires: pkgconfig(android-headers)
 Source0:       %{name}-%{version}.tgz
 AutoReqProv:   no
 
@@ -45,8 +44,6 @@ mkdir -p external
 pushd external
 tar -zxf %SOURCE0
 mv audioflingerglue* audioflingerglue
-# Copy custom "android-config.h" for audioflinger build
-cp /usr/lib/droid-devel/droid-headers/android-config.h audioflingerglue
 popd
 
 %build
