@@ -1,7 +1,5 @@
 LOCAL_PATH:= $(call my-dir)
 
-USE_32BIT_MINIAF := $(shell cat $(LOCAL_PATH)/android-config.h |grep "\#define" |grep "USE_32BIT_MINIAF" |grep -o "true\|1")
-
 ANDROID_MAJOR :=
 ANDROID_MINOR :=
 ANDROID_MICRO :=
@@ -66,8 +64,8 @@ LOCAL_CPPFLAGS := -DANDROID_MAJOR=$(ANDROID_MAJOR) -DANDROID_MINOR=$(ANDROID_MIN
 ifneq ($(CM_BUILD),)
 LOCAL_CPPFLAGS += -DCM_BUILD
 endif
-ifneq ($(strip $(USE_32BIT_MINIAF)),)
-LOCAL_MULTILIB := 32
+ifneq ($(shell cat frameworks/av/include/media/AudioSystem.h |grep GetEMParameter),)
+LOCAL_CPPFLAGS += -DUSE_SERVICES_VENDOR_EXTENSION
 endif
 LOCAL_MODULE := miniafservice
 include $(BUILD_EXECUTABLE)
