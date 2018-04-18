@@ -58,6 +58,10 @@ LIB_TARGET=libaudioflingerglue
     ANDROID_ARCH=`grep -h -m 1 "TARGET_ARCH *:=" device/*/*/*.mk | sed -e 's/ *TARGET_ARCH *:= *\([a-zA-Z0-9_]*\) */\1/'`
     if [ "$ANDROID_ARCH" == "arm64" ]; then
         LIB_TARGET=${LIB_TARGET}_32
+    else
+%if %{?audioflinglue_32bit:1}%{!?audioflinglue_32bit:0}
+	LIB_TARGET=${LIB_TARGET}_32
+%endif
     fi
 %endif
 
