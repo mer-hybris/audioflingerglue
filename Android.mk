@@ -1,5 +1,7 @@
 LOCAL_PATH:= $(call my-dir)
 
+MINIAF_32 := $(shell cat frameworks/av/media/mediaserver/Android.mk |grep "LOCAL_32_BIT_ONLY[[:space:]]*:=[[:space:]]*" |grep -o "true\|1\|false\|0")
+
 ANDROID_MAJOR :=
 ANDROID_MINOR :=
 ANDROID_MICRO :=
@@ -79,4 +81,7 @@ ifneq ($(shell cat frameworks/av/include/media/AudioSystem.h |grep GetEMParamete
 LOCAL_CPPFLAGS += -DUSE_SERVICES_VENDOR_EXTENSION
 endif
 LOCAL_MODULE := miniafservice
+ifeq ($(strip $(MINIAF_32)), true)
+LOCAL_32_BIT_ONLY := true
+endif
 include $(BUILD_EXECUTABLE)
