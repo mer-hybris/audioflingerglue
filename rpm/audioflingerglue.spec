@@ -48,8 +48,8 @@ popd
 
 %build
 echo "building for %{device_rpm_architecture_string}"
-droid-make "clean; gettargetarch > lunch_arch || echo unknown > lunch_arch"
-droid-make %{?_smp_mflags} $(external/audioflingerglue/detect_build_targets.sh %{device_rpm_architecture_string})
+TARGETS=`external/audioflingerglue/detect_build_targets.sh %{device_rpm_architecture_string} || exit 1`
+droid-make %{?_smp_mflags} $TARGETS
 
 %install
 
