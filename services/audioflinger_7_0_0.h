@@ -62,7 +62,7 @@ public:
                                 audio_format_t format,
                                 audio_channel_mask_t channelMask,
                                 size_t *pFrameCount,
-                                audio_output_flags_t *flags,
+                                track_flags_t *flags,
                                 const sp<IMemory>& sharedBuffer,
                                 // On successful return, AudioFlinger takes over the handle
                                 // reference and will release it when the track is destroyed.
@@ -86,7 +86,7 @@ public:
                                 audio_channel_mask_t channelMask,
                                 const String16& callingPackage,
                                 size_t *pFrameCount,
-                                audio_input_flags_t *flags,
+                                track_flags_t *flags,
                                 pid_t pid,
                                 pid_t tid,  // -1 means unused, otherwise must be valid non-0
                                 int clientUid,
