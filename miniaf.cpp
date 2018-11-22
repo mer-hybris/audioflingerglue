@@ -32,6 +32,8 @@
 #include "services/audioflinger_5_1_0_custom.h"
 #elif ANDROID_MAJOR == 7 && ANDROID_MINOR == 0
 #include "services/audioflinger_7_0_0_custom.h"
+#elif ANDROID_MAJOR == 7 && ANDROID_MINOR == 1
+#include "services/audioflinger_7_1_0_custom.h"
 #elif ANDROID_MAJOR == 6 && ANDROID_MINOR == 0
 #include "services/audioflinger_6_0_0_custom.h"
 #else
