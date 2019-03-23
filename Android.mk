@@ -49,11 +49,11 @@ LOCAL_SHARED_LIBRARIES := libc \
                           libserviceutility
 endif
 
-ifeq ($(strip $(ANDROID_MAJOR)),8)
+ifeq ($(ANDROID_MAJOR),$(filter $(ANDROID_MAJOR),8 9))
 LOCAL_SHARED_LIBRARIES +=  liblog
 endif
 
-LOCAL_CPPFLAGS=-DANDROID_MAJOR=$(ANDROID_MAJOR) -DANDROID_MINOR=$(ANDROID_MINOR) -DANDROID_MICRO=$(ANDROID_MICRO)
+LOCAL_CPPFLAGS :=-DANDROID_MAJOR=$(ANDROID_MAJOR) -DANDROID_MINOR=$(ANDROID_MINOR) -DANDROID_MICRO=$(ANDROID_MICRO) -Wno-unused-parameter
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := libaudioflingerglue
 include $(BUILD_SHARED_LIBRARY)
@@ -67,13 +67,13 @@ LOCAL_SHARED_LIBRARIES := libutils \
                           libmedia \
                           libhardware
 
-ifeq ($(strip $(ANDROID_MAJOR)),8)
+ifeq ($(ANDROID_MAJOR),$(filter $(ANDROID_MAJOR),8 9))
 LOCAL_SHARED_LIBRARIES += libaudioclient \
                           liblog
 endif
 
 LOCAL_MODULE_TAGS := optional
-LOCAL_CPPFLAGS := -DANDROID_MAJOR=$(ANDROID_MAJOR) -DANDROID_MINOR=$(ANDROID_MINOR) -DANDROID_MICRO=$(ANDROID_MICRO)
+LOCAL_CPPFLAGS := -DANDROID_MAJOR=$(ANDROID_MAJOR) -DANDROID_MINOR=$(ANDROID_MINOR) -DANDROID_MICRO=$(ANDROID_MICRO) -Wno-unused-parameter
 ifneq ($(CM_BUILD),)
 LOCAL_CPPFLAGS += -DCM_BUILD
 endif
