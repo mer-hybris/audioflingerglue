@@ -15,6 +15,8 @@ License:       ASL 2.0
 BuildRequires: ubu-trusty
 BuildRequires: sudo-for-abuild
 BuildRequires: droid-bin-src-full
+BuildRequires: grep
+BuildRequires: which
 Source0:       %{name}-%{version}.tgz
 AutoReqProv:   no
 
