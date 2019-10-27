@@ -51,10 +51,14 @@ LOCAL_SHARED_LIBRARIES := libc \
                           libcutils \
                           libbinder \
                           libmedia \
-                          libserviceutility
+
 endif
 
-ifeq ($(ANDROID_MAJOR),$(filter $(ANDROID_MAJOR),8 9))
+ifeq ($(shell test $(ANDROID_VERSION_MAJOR) -le 9 && echo true),true)
+LOCAL_SHARED_LIBRARIES += libserviceutility
+endif
+
+ifeq ($(ANDROID_MAJOR),$(filter $(ANDROID_MAJOR),8 9 10))
 LOCAL_SHARED_LIBRARIES +=  liblog
 endif
 
@@ -72,7 +76,7 @@ LOCAL_SHARED_LIBRARIES := libutils \
                           libmedia \
                           libhardware
 
-ifeq ($(ANDROID_MAJOR),$(filter $(ANDROID_MAJOR),8 9))
+ifeq ($(ANDROID_MAJOR),$(filter $(ANDROID_MAJOR),8 9 10))
 LOCAL_SHARED_LIBRARIES += libaudioclient \
                           liblog
 endif
