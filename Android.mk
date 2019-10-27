@@ -1,13 +1,18 @@
 LOCAL_PATH:= $(call my-dir)
 
+ifneq (,$(wildcard frameworks/av/media/libmediaplayerservice/Android.mk))
 MINIAF_32 := $(shell cat frameworks/av/media/mediaserver/Android.mk |grep "LOCAL_32_BIT_ONLY[[:space:]]*:=[[:space:]]*" |grep -o "true\|1\|false\|0")
+endif
 
 ANDROID_MAJOR :=
 ANDROID_MINOR :=
 ANDROID_MICRO :=
 
 ifndef ANDROID_MAJOR
+# First check if version_defaults.mk was already loaded.
+ifndef PLATFORM_VERSION
 include build/core/version_defaults.mk
+endif
 ifeq ($(strip $(PLATFORM_VERSION)),)
 $error(*** Cannot get Android platform version)
 endif
@@ -46,10 +51,14 @@ LOCAL_SHARED_LIBRARIES := libc \
                           libcutils \
                           libbinder \
                           libmedia \
-                          libserviceutility
+
 endif
 
-ifeq ($(ANDROID_MAJOR),$(filter $(ANDROID_MAJOR),8 9))
+ifeq ($(shell test $(ANDROID_VERSION_MAJOR) -le 9 && echo true),true)
+LOCAL_SHARED_LIBRARIES += libserviceutility
+endif
+
+ifeq ($(ANDROID_MAJOR),$(filter $(ANDROID_MAJOR),8 9 10))
 LOCAL_SHARED_LIBRARIES +=  liblog
 endif
 
@@ -67,7 +76,7 @@ LOCAL_SHARED_LIBRARIES := libutils \
                           libmedia \
                           libhardware
 
-ifeq ($(ANDROID_MAJOR),$(filter $(ANDROID_MAJOR),8 9))
+ifeq ($(ANDROID_MAJOR),$(filter $(ANDROID_MAJOR),8 9 10))
 LOCAL_SHARED_LIBRARIES += libaudioclient \
                           liblog
 endif
